@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
 import routes from "./src/routes/crmRoutes";
+import swaggerUi from "swagger-ui-express";
 
 const app = express();
 
@@ -46,6 +47,8 @@ app.use((req, res, next) => {
     next();
   }
 });
+
+app.use("/docs", swaggerUi.serve);
 
 routes(app);
 // serving static files
