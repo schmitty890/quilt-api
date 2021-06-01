@@ -14,32 +14,7 @@ import {
   updateUserWithID,
 } from "../controllers/userController";
 
-import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
-
-// determine port server is running on
-const PORT = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8081;
-// determine port for swagger docs
-let hostURL =
-  PORT === 8081 ? "localhost:8081" : "quilt-api-hdi7d.ondigitalocean.app";
-
-// define swagger options
-const options = {
-  swaggerDefinition: {
-    info: {
-      title: "Quilting docs",
-      version: "1.0.0",
-      description: "endpoints for quilt project",
-    },
-    host: hostURL,
-    basePath: "/",
-  },
-  apis: ["./src/routes/crmRoutes.js"],
-};
-const specs = swaggerJsdoc(options);
-
 const routes = (app) => {
-  app.get("/docs", swaggerUi.setup(specs));
   app
     .route("/contact")
     // get all contacts
@@ -103,7 +78,31 @@ const routes = (app) => {
     .post(register);
 
   // login route
-  app.route("/login").post(login);
+  app
+    .route("/login")
+    /**
+     * @swagger
+     * /login/:
+     *    post:
+     *      description: Log in a user
+     *      produces:
+     *          - application/json
+     *      parameters:
+     *          - name: LoginUser
+     *            description: LoginUser object
+     *            in: body
+     *            required: true
+     *            schema:
+     *              $ref: '#/definitions/LoginUser'
+     *      responses:
+     *          200:
+     *              description: Register a user
+     *          400:
+     *              description: Error from parameters
+     *          500:
+     *              description: Server Error
+     */
+    .post(login);
 
   /**
    * @swagger
@@ -112,6 +111,17 @@ const routes = (app) => {
    *     properties:
    *       firstName:
    *         type: string
+   *       email:
+   *         type: string
+   *       password:
+   *         type: string
+   */
+
+  /**
+   * @swagger
+   * definitions:
+   *   LoginUser:
+   *     properties:
    *       email:
    *         type: string
    *       password:

@@ -3,7 +3,9 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
 import routes from "./src/routes/crmRoutes";
+import patternRoutes from "./src/routes/patternRoutes";
 import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from "swagger-jsdoc";
 
 const app = express();
 
@@ -48,9 +50,33 @@ app.use((req, res, next) => {
   }
 });
 
+// determine port server is running on
+// const PORT = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8081;
+// determine port for swagger docs
+let hostURL =
+  PORT === 8081 ? "localhost:8081" : "quilt-api-hdi7d.ondigitalocean.app";
+
+// define swagger options
+const options = {
+  swaggerDefinition: {
+    info: {
+      title: "Quilting docs",
+      version: "1.0.0",
+      description: "endpoints for quilt project",
+    },
+    host: hostURL,
+    basePath: "/",
+  },
+  apis: ["./src/routes/*.js"],
+};
+const specs = swaggerJsdoc(options);
+
 app.use("/docs", swaggerUi.serve);
 
+app.get("/docs", swaggerUi.setup(specs));
+
 routes(app);
+patternRoutes(app);
 // serving static files
 app.use(express.static("public"));
 
