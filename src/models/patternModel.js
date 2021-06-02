@@ -5,12 +5,15 @@ const Schema = mongoose.Schema;
 export const PatternSchema = new Schema({
   name: {
     type: String,
+    required: true,
   },
-  image: {
+  imageURL: {
     type: String,
+    required: true,
   },
   category: {
     type: String,
+    required: true,
   },
 });
 

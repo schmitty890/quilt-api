@@ -4,6 +4,9 @@ import { PatternSchema } from "../models/patternModel";
 const Pattern = mongoose.model("Pattern", PatternSchema);
 
 export const addNewPattern = (req, res) => {
+  console.log("NEW PATTERN");
+  console.log(req.body);
+  console.log("NEW PATTERN");
   let newPattern = new Pattern(req.body);
 
   newPattern.save((err, pattern) => {

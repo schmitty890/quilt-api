@@ -59,7 +59,7 @@ const routes = (app) => {
      *          500:
      *              description: Server Error
      */
-    .post(loginRequired, addNewPattern);
+    .post(addNewPattern);
 
   app
     .route("/pattern/:patternID")
