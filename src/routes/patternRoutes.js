@@ -4,6 +4,7 @@ import {
   getPatternWithID,
   updatePattern,
   deletePattern,
+  getPatternsByCategory,
 } from "../controllers/patternController";
 
 import {
@@ -109,6 +110,32 @@ const routes = (app) => {
 
     // delete a specific contact
     .delete(loginRequired, deletePattern);
+
+  app
+    .route("/getPatternsByCategory/:category")
+    // get all contacts by category
+    /**
+     * @swagger
+     * /getPatternsByCategory/{category}:
+     *    get:
+     *      description: Return all patterns of a category
+     *      produces:
+     *          - application/json
+     *      parameters:
+     *          - name: category
+     *            in: path
+     *            required: true
+     *            type: string
+     *      responses:
+     *          200:
+     *              description: Returns an array of objects of a pattern category
+     */
+    .get((req, res, next) => {
+      // middleware
+      console.log(`Request from: ${req.originalUrl}`);
+      console.log(`Request type: ${req.method}`);
+      next();
+    }, getPatternsByCategory);
 
   app
     .route("/user/:userID")
