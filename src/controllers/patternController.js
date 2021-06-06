@@ -21,7 +21,7 @@ export const getPatterns = (req, res) => {
       res.json(err);
     }
     res.json(pattern);
-  });
+  }).sort({ name: 1 });
 };
 
 export const getPatternWithID = (req, res) => {
