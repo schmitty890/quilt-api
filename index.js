@@ -2,12 +2,16 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
 import routes from "./src/routes/crmRoutes";
 import patternRoutes from "./src/routes/patternRoutes";
+import emailRoutes from "./src/routes/emailRoutes";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 
 const app = express();
+
+dotenv.config({ path: ".env" });
 
 const PORT = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8081;
 
@@ -77,6 +81,7 @@ app.get("/docs", swaggerUi.setup(specs));
 
 routes(app);
 patternRoutes(app);
+emailRoutes(app);
 // serving static files
 app.use(express.static("public"));
 
