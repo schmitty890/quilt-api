@@ -20,8 +20,8 @@ export const sendEmail = (req, res) => {
     let info = await transporter.sendMail({
       from: `${newEmail.yourEmail}`, // sender address
       to: process.env.GMAILEMAIL, // list of receivers
-      subject: "Portfolio email", // Subject line
-      text: `A message from ${newEmail.yourName} at ${newEmail.yourEmail}!  ${newEmail.yourMessage}`, // plain text body
+      subject: "Quilt contact form email", // Subject line
+      text: `A message from ${newEmail.yourName} at ${newEmail.yourEmail}! Message: ${newEmail.yourMessage}`, // plain text body
     });
 
     console.log("Message sent: %s", info.messageId);
