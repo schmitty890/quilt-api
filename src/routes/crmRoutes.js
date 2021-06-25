@@ -12,6 +12,8 @@ import {
   loginRequired,
   getUserWithID,
   updateUserWithID,
+  resetPassword,
+  newPassword,
 } from "../controllers/userController";
 
 const routes = (app) => {
@@ -104,6 +106,60 @@ const routes = (app) => {
      */
     .post(login);
 
+  // reset password route
+  app
+    .route("/reset-password")
+    /**
+     * @swagger
+     * /reset-password/:
+     *    post:
+     *      description: Reset a password for a user - send them an email with unique token
+     *      produces:
+     *          - application/json
+     *      parameters:
+     *          - name: Reset password email
+     *            description: Reset users password
+     *            in: body
+     *            required: true
+     *            schema:
+     *              $ref: '#/definitions/ResetPassword'
+     *      responses:
+     *          200:
+     *              description: Reset password for a user
+     *          400:
+     *              description: Error from parameters
+     *          500:
+     *              description: Server Error
+     */
+    .post(resetPassword);
+
+  // set new password route
+  app
+    .route("/new-password")
+    /**
+     * @swagger
+     * /reset-password/:
+     *    post:
+     *      description: New password for a user
+     *      produces:
+     *          - application/json
+     *      parameters:
+     *          - name: New password email
+     *            description: New users password
+     *            in: body
+     *            required: true
+     *            schema:
+     *              $ref: '#/definitions/ResetPassword'
+     *      responses:
+     *          200:
+     *              description: New password for a user
+     *          400:
+     *              description: Error from parameters
+     *          500:
+     *              description: Server Error
+     */
+    .post(newPassword);
+
   /**
    * @swagger
    * definitions:
@@ -125,6 +181,15 @@ const routes = (app) => {
    *       email:
    *         type: string
    *       password:
+   *         type: string
+   */
+
+  /**
+   * @swagger
+   * definitions:
+   *   ResetPassword:
+   *     properties:
+   *       email:
    *         type: string
    */
 };

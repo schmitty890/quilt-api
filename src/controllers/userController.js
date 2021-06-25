@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import { UserSchema } from "../models/userModel";
 
@@ -102,4 +104,91 @@ export const updateUserWithID = (req, res) => {
       res.json(user);
     }
   );
+};
+
+export const resetPassword = (req, res) => {
+  console.log("resetPassword");
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+    }
+    const token = buffer.toString("hex");
+    console.log(token);
+    console.log(req.body);
+    console.log(req.body.email);
+    User.findOne({ email: req.body.email }).then((user) => {
+      if (!user) {
+        return res
+          .status(422)
+          .json({ error: "User dont exists with that email" });
+      }
+      user.resetToken = token;
+      user.expireToken = Date.now() + 3600000;
+      user.save().then((result) => {
+        console.log(result);
+        // transporter.sendMail({
+        //     to:user.email,
+        //     from:"no-replay@insta.com",
+        //     subject:"password reset",
+        //     html:`
+        //     <p>You requested for password reset</p>
+        //     <h5>click in this <a href="${EMAIL}/reset/${token}">link</a> to reset password</h5>
+        //     `
+        // })
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: process.env.GMAILEMAIL,
+            pass: process.env.GMAILPASS,
+          },
+        });
+        // console.log("---------------TRANSPORTER-------------------");
+        // console.log(transporter);
+        // console.log("----------------------------------");
+        const PORT =
+          process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8081;
+        let hostURL =
+          PORT === 8081
+            ? "http://localhost:8000"
+            : "https://quiltersara.netlify.app"; // if local development, set to localhost 8000 (front end react app) otherwise set to
+
+        const mailOptions = {
+          to: user.email,
+          from: process.env.GMAILEMAIL,
+          subject: "Reset your password on Quilter Sara",
+          text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
+            Please click on the following link, or paste this into your browser to complete the process:\n\n
+            ${hostURL}/resetPassword/${token}\n\n
+            If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+        };
+        transporter.sendMail(mailOptions);
+
+        res.json({ message: "check your email" });
+      });
+    });
+  });
+};
+
+export const newPassword = (req, res) => {
+  console.log("newPassword");
+
+  const newPassword = req.body.password;
+  const sentToken = req.body.token;
+  User.findOne({ resetToken: sentToken, expireToken: { $gt: Date.now() } })
+    .then((user) => {
+      if (!user) {
+        return res.status(422).json({ error: "Try again session expired" });
+      }
+      bcrypt.hash(newPassword, 12).then((hashedpassword) => {
+        user.hashPassword = hashedpassword;
+        user.resetToken = undefined;
+        user.expireToken = undefined;
+        user.save().then((saveduser) => {
+          res.json({ message: "password updated success" });
+        });
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

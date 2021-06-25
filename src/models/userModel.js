@@ -13,6 +13,12 @@ export const UserSchema = new Schema({
   hashPassword: {
     type: String,
   },
+  resetToken: {
+    type: String,
+  },
+  expireToken: {
+    type: Date,
+  },
 });
 
 UserSchema.methods.comparePassword = (password, hashPassword) => {
