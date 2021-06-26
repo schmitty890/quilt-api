@@ -18,11 +18,13 @@ import {
 const routes = (app) => {
   app
     .route("/pattern")
-    // get all contacts
+    // get all patterns
     /**
      * @swagger
      * /pattern:
      *    get:
+     *      tags:
+     *          - pattern endpoints
      *      description: Return all patterns
      *      consumes:
      *          - application/json
@@ -42,6 +44,8 @@ const routes = (app) => {
      * @swagger
      * /pattern:
      *    post:
+     *      tags:
+     *          - pattern endpoints
      *      description: Add new pattern
      *      produces:
      *          - application/json
@@ -69,6 +73,8 @@ const routes = (app) => {
      * @swagger
      * /pattern/{id}:
      *    get:
+     *      tags:
+     *          - pattern endpoints
      *      description: Return one pattern
      *      produces:
      *          - application/json
@@ -83,11 +89,13 @@ const routes = (app) => {
      */
     .get(getPatternWithID)
 
-    // update a specific contact
+    // update a specific pattern
     /**
      * @swagger
      * /pattern/{id}:
      *    put:
+     *      tags:
+     *          - pattern endpoints
      *      description: Update one pattern
      *      produces:
      *          - application/json
@@ -118,6 +126,8 @@ const routes = (app) => {
      * @swagger
      * /getPatternsByCategory/{category}:
      *    get:
+     *      tags:
+     *          - pattern endpoints
      *      description: Return all patterns of a category
      *      produces:
      *          - application/json
@@ -140,8 +150,52 @@ const routes = (app) => {
   app
     .route("/user/:userID")
     // get user with specific id
+    /**
+     * @swagger
+     * /user/{id}:
+     *    get:
+     *      tags:
+     *          - user endpoints
+     *      description: Return user by id
+     *      produces:
+     *          - application/json
+     *      parameters:
+     *          - name: userID
+     *            in: path
+     *            required: true
+     *            type: string
+     *            schema:
+     *              $ref: '#/definitions/User'
+     *      responses:
+     *          200:
+     *              description: Returns a user object
+     */
     .get(loginRequired, getUserWithID)
     // update a specific contact
+    /**
+     * @swagger
+     * /user/{id}:
+     *    put:
+     *      tags:
+     *          - user endpoints
+     *      description: Update one user
+     *      produces:
+     *          - application/json
+     *      parameters:
+     *          - name: User
+     *            description: User object
+     *            in: body
+     *            required: true
+     *            schema:
+     *              $ref: '#/definitions/Pattern'
+     *          - name: id
+     *            in: path
+     *            required: true
+     *            type: string
+     *      responses:
+     *          200:
+     *              description: Update a pattern based on pattern id
+     */
     .put(loginRequired, updateUserWithID);
 
   /**
@@ -154,6 +208,15 @@ const routes = (app) => {
    *       image:
    *         type: string
    *       category:
+   *         type: string
+   */
+
+  /**
+   * @swagger
+   * definitions:
+   *   User:
+   *     properties:
+   *       userID:
    *         type: string
    */
 };

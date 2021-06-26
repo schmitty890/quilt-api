@@ -59,6 +59,8 @@ const routes = (app) => {
      * @swagger
      * /auth/register/:
      *    post:
+     *      tags:
+     *          - user endpoints
      *      description: Register one user
      *      produces:
      *          - application/json
@@ -86,6 +88,8 @@ const routes = (app) => {
      * @swagger
      * /login/:
      *    post:
+     *      tags:
+     *          - user endpoints
      *      description: Log in a user
      *      produces:
      *          - application/json
@@ -113,6 +117,8 @@ const routes = (app) => {
      * @swagger
      * /reset-password/:
      *    post:
+     *      tags:
+     *          - user endpoints
      *      description: Reset a password for a user - send them an email with unique token
      *      produces:
      *          - application/json
@@ -140,6 +146,8 @@ const routes = (app) => {
      * @swagger
      * /reset-password/:
      *    post:
+     *      tags:
+     *          - user endpoints
      *      description: New password for a user
      *      produces:
      *          - application/json
