@@ -19,6 +19,9 @@ export const UserSchema = new Schema({
   expireToken: {
     type: Date,
   },
+  admin: {
+    type: Boolean,
+  },
 });
 
 UserSchema.methods.comparePassword = (password, hashPassword) => {

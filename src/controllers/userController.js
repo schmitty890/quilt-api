@@ -68,10 +68,15 @@ export const login = (req, res) => {
         } else {
           return res.json({
             token: jwt.sign(
-              { email: user.email, firstName: user.firstName, _id: user.id },
+              {
+                email: user.email,
+                firstName: user.firstName,
+                _id: user.id,
+              },
               "RESTFULAPIs"
             ),
             _id: user.id,
+            admin: user.admin,
           });
         }
       }
